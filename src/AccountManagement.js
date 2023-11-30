@@ -65,8 +65,12 @@ export default function AccountManagement() {
           { group: "admin" },
           config
         );
+        if (!res.data.data) {
+          navigate("/");
+        }
         console.log(res);
       } catch (err) {
+        console.log(err);
         if (err.response.status === 401) {
           navigate("/");
         }
