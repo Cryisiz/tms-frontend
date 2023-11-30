@@ -18,18 +18,14 @@ export default function Appbar(props) {
     },
   };
   useEffect(() => {
-    const getUserGroup = async () => {
-      const group = await axios.get("http://localhost:8080/controller/getUserGroup", config);
-      const groups = group.data.group_list.split(",");
-      function isAdmin(group) {
-        return group.toUpperCase() === "ADMIN";
-      }
-      if (groups.some(isAdmin)) {
-        setOpen(true);
-      }
-    };
-    getUserGroup();
-  }, []);
+    const groups = props.group.split(",");
+    function isAdmin(group) {
+      return group.toUpperCase() === "ADMIN";
+    }
+    if (groups.some(isAdmin)) {
+      setOpen(true);
+    }
+  }, [props]);
 
   function OnLoad() {
     const [isLogged, setIsLogged] = useState(null);

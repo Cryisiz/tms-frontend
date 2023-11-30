@@ -62,8 +62,7 @@ export default function SignIn() {
 
       //cookie
       Cookies.remove("token");
-      Cookies.remove("username");
-      Cookies.set("token", res.data.token, { expires: 7 });
+      Cookies.set("token", res.data.token, { expires: parseInt(res.data.expire) });
       //Cookies.set("username", res.data.username, { expires: 7 });
       navigate("/home");
     } catch (error) {
