@@ -11,14 +11,15 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 const defaultTheme = createTheme();
 export default function SignIn() {
   const navigate = useNavigate();
 
   //error message ui
-  const [open, setOpen] = React.useState(false);
-  const [errorMessage, setErrorMessage] = React.useState("");
+  const [open, setOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   //Authorization
   const config = {
@@ -28,28 +29,18 @@ export default function SignIn() {
   };
 
   //Check for when user is already logged in
-  async function checkLogin() {
-    try {
-      const isLogin = await axios.get("http://localhost:8080/controller/checkLogin", config);
-      if (isLogin.data) {
-        const admin = await axios.post(
-          "http://localhost:8080/controller/checkGroup",
-          { group: "admin" },
-          config
-        );
-        if (admin.data) {
-          navigate("/adminhome");
-        } else {
+  useEffect(() => {
+    async function checkLogin() {
+      try {
+        const isLogin = await axios.get("http://localhost:8080/controller/checkLogin", config);
+        if (isLogin.data) {
           navigate("/home");
         }
+      } catch (error) {
+        setErrorMessage(error.response.data.errMessage);
+        setOpen(true);
       }
-    } catch (error) {
-      setErrorMessage(error.response.data.errMessage);
-      setOpen(true);
     }
-  }
-  //on load
-  React.useEffect(() => {
     if (Cookies.get("token")) {
       //check with server
       checkLogin();
@@ -74,17 +65,7 @@ export default function SignIn() {
       Cookies.remove("username");
       Cookies.set("token", res.data.token, { expires: 7 });
       //Cookies.set("username", res.data.username, { expires: 7 });
-
-      //check is admin for when user is trying to log in
-      const groups = res.data.group_list.split(",");
-      function isAdmin(group) {
-        return group.toUpperCase() === "ADMIN";
-      }
-      if (groups.some(isAdmin)) {
-        navigate("/adminhome");
-      } else {
-        navigate("/home");
-      }
+      navigate("/home");
     } catch (error) {
       setErrorMessage(error.response.data.errMessage);
       setOpen(true);

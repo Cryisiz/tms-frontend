@@ -2,18 +2,13 @@ import * as React from "react";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
-import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Appbar from "./Appbar";
 import { useLocation } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import Cookies from "js-cookie";
-import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Alert from "@mui/material/Alert";
@@ -33,7 +28,6 @@ export default function MyAccount() {
   const [editButton, setEditButton] = useState("Edit");
   const [errorMessage, setErrorMessage] = useState("");
   const [open, setOpen] = React.useState(false);
-  const { state } = useLocation();
   const appDispatch = React.useContext(DispatchContext);
   //Authorization
   const config = {
@@ -97,7 +91,7 @@ export default function MyAccount() {
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
-      <Appbar title="My Account" group={state.group} />
+      <Appbar title="My Account" />
       <main>
         <ToastContainer
           position="top-center"

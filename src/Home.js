@@ -10,16 +10,25 @@ import Container from "@mui/material/Container";
 import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Appbar from "./Appbar";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 const defaultTheme = createTheme();
 
 export default function Home() {
+  //Authorization
+  const config = {
+    headers: {
+      Authorization: "Bearer " + Cookies.get("token"),
+    },
+  };
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
       <Appbar title="Home" />
       <main>
-        {/* Hero unit */}
         <Box
           sx={{
             bgcolor: "background.paper",
