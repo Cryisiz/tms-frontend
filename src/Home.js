@@ -13,11 +13,13 @@ import Appbar from "./Appbar";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
 const defaultTheme = createTheme();
 
 export default function Home() {
   const [userGroup, setUserGroup] = useState("");
+  const navigate = useNavigate();
   //Authorization
   const config = {
     headers: {
@@ -26,8 +28,14 @@ export default function Home() {
   };
   useEffect(() => {
     const getUserGroup = async () => {
-      const group = await axios.get("http://localhost:8080/controller/getUserGroup", config);
-      setUserGroup(group.data.group_list);
+      try {
+        const group = await axios.get("http://localhost:8080/controller/getUserGroup", config);
+        setUserGroup(group.data.group_list);
+      } catch (err) {
+        if (err.response.status === 401) {
+          navigate("/");
+        }
+      }
     };
     getUserGroup();
   }, []);

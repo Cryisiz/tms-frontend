@@ -18,15 +18,19 @@ export default function Appbar(props) {
     },
   };
   useEffect(() => {
-    const groups = props.group.split(",");
-    function isAdmin(group) {
-      return group.toUpperCase() === "ADMIN";
-    }
-    if (groups.some(isAdmin)) {
-      setOpen(true);
+    if (props.group !== undefined && props.group !== null && props.group !== "") {
+      const groups = props.group.split(",");
+
+      function isAdmin(group) {
+        return group.toUpperCase() === "ADMIN";
+      }
+      if (groups.some(isAdmin)) {
+        setOpen(true);
+      }
     }
   }, [props]);
 
+  /*
   function OnLoad() {
     const [isLogged, setIsLogged] = useState(null);
     const [isGroup, setIsGroup] = useState(null);
@@ -78,6 +82,7 @@ export default function Appbar(props) {
   }
 
   OnLoad();
+*/
   //home
   const homePage = () => {
     navigate("/home");

@@ -20,6 +20,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Select from "react-select";
 import DispatchContext from "./DispatchContext";
+import { useNavigate } from "react-router-dom";
 
 const defaultTheme = createTheme();
 const components = {
@@ -32,6 +33,7 @@ const createOption = (label) => ({
 });
 
 export default function AccountManagement() {
+  const navigate = useNavigate();
   const [inputValue, setInputValue] = React.useState("");
   const [createValue, setCreateValue] = React.useState([]);
   const [users, setUsers] = useState({
@@ -55,7 +57,23 @@ export default function AccountManagement() {
         event.preventDefault();
     }
   };
-
+  useEffect(() => {
+    const checkGroup = async () => {
+      try {
+        const res = await axios.post(
+          "http://localhost:8080/controller/checkGroup",
+          { group: "admin" },
+          config
+        );
+        console.log(res);
+      } catch (err) {
+        if (err.response.status === 401) {
+          navigate("/");
+        }
+      }
+    };
+    checkGroup();
+  }, []);
   async function fetchData() {
     try {
       const res = await axios.get("http://localhost:8080/controller/getUsers/", config);
@@ -387,7 +405,7 @@ export default function AccountManagement() {
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
-      <Appbar title="Admin Home" group="admin" />
+      <Appbar title="Account Management" />
       <main>
         <Container maxWidth="lg">
           <Box
