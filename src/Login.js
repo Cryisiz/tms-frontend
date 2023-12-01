@@ -28,25 +28,6 @@ export default function SignIn() {
     },
   };
 
-  //Check for when user is already logged in
-  useEffect(() => {
-    async function checkLogin() {
-      try {
-        const isLogin = await axios.get("http://localhost:8080/controller/checkLogin", config);
-        if (isLogin.data) {
-          navigate("/home");
-        }
-      } catch (error) {
-        setErrorMessage(error.response.data.errMessage);
-        setOpen(true);
-      }
-    }
-    if (Cookies.get("token")) {
-      //check with server
-      checkLogin();
-    }
-  }, []);
-
   //submit
   const handleSubmit = async (event) => {
     event.preventDefault();

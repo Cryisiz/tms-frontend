@@ -33,8 +33,9 @@ const createOption = (label) => ({
 
 export default function AccountManagement() {
   const navigate = useNavigate();
-  const [inputValue, setInputValue] = React.useState("");
-  const [createValue, setCreateValue] = React.useState([]);
+  const [call, setCall] = useState(0);
+  const [inputValue, setInputValue] = useState("");
+  const [createValue, setCreateValue] = useState([]);
   const [users, setUsers] = useState({
     username: "",
     email: "",
@@ -112,6 +113,7 @@ export default function AccountManagement() {
           config
         );
         toast.success(response.data.message);
+        setCall(call + 1);
         setTable(
           table.map((row) => {
             if (row.username === id) {
@@ -140,6 +142,7 @@ export default function AccountManagement() {
         config
       );
       toast.success(response.data.message);
+      setCall(call + 1);
       setTable(
         table.map((row) => {
           if (row.username === user) {
@@ -400,7 +403,7 @@ export default function AccountManagement() {
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
-      <Appbar title="Account Management" group="admin" />
+      <Appbar title="Account Management" group="admin" call={call} />
       <main>
         <Container maxWidth="lg">
           <Box
