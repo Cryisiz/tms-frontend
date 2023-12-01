@@ -13,11 +13,12 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Alert from "@mui/material/Alert";
 import { ToastContainer, toast } from "react-toastify";
-import DispatchContext from "./DispatchContext";
+import { useNavigate } from "react-router-dom";
 
 const defaultTheme = createTheme();
 
 export default function MyAccount() {
+  const navigate = useNavigate();
   const [defAccInfo, setDefAccInfo] = useState({
     username: "",
     email: "",
@@ -28,7 +29,6 @@ export default function MyAccount() {
   const [editButton, setEditButton] = useState("Edit");
   const [errorMessage, setErrorMessage] = useState("");
   const [open, setOpen] = React.useState(false);
-  const appDispatch = React.useContext(DispatchContext);
   //Authorization
   const config = {
     headers: {
@@ -44,7 +44,9 @@ export default function MyAccount() {
         response.data.data.password = "";
         setDefAccInfo(response.data.data);
       } catch (err) {
-        appDispatch({ type: err.response.status });
+        if (err.response.status === 401) {
+          navigate("/");
+        }
       }
     }
     fetchData();

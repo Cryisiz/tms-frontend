@@ -7,7 +7,6 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
 
 export default function Appbar(props) {
   const navigate = useNavigate();
@@ -18,71 +17,52 @@ export default function Appbar(props) {
     },
   };
   useEffect(() => {
-    if (props.group !== undefined && props.group !== null && props.group !== "") {
-      const groups = props.group.split(",");
-
-      function isAdmin(group) {
-        return group.toUpperCase() === "ADMIN";
-      }
-      if (groups.some(isAdmin)) {
+    const checkGroup = async () => {
+      const res = await axios.post(
+        "http://localhost:8080/controller/checkGroup",
+        { group: "admin" },
+        config
+      );
+      if (res.data) {
         setOpen(true);
       }
-    }
-  }, [props]);
+    };
+    checkGroup();
+  }, []);
 
-  /*
-  function OnLoad() {
-    const [isLogged, setIsLogged] = useState(null);
-    const [isGroup, setIsGroup] = useState(null);
-
-    useEffect(() => {
-      const getLogin = async () => {
+  useEffect(() => {
+    const checkLogin = async () => {
+      try {
+        await axios.get("http://localhost:8080/controller/checkLogin", config);
+      } catch (err) {
+        if (err.response.status === 401) {
+          navigate("/");
+        }
+      }
+    };
+    checkLogin();
+  }, []);
+  useEffect(() => {
+    const checkGroup = async () => {
+      if (props.group !== undefined && props.group !== null && props.group !== "") {
         try {
-          const login = await axios.get("http://localhost:8080/controller/checkLogin", config);
-          setIsLogged(login.data);
+          const res = await axios.post(
+            "http://localhost:8080/controller/checkGroup",
+            { group: props.group },
+            config
+          );
+          if (!res.data) {
+            navigate("/");
+          }
         } catch (err) {
           if (err.response.status === 401) {
             navigate("/");
           }
         }
-      };
-      const getGroup = async (group) => {
-        if (group !== undefined && group !== null && group !== "") {
-          try {
-            const res = await axios.post(
-              "http://localhost:8080/controller/checkGroup",
-              { group: group },
-              config
-            );
-            setIsGroup(res.data);
-          } catch (err) {
-            if (err.response.status === 401) {
-              navigate("/");
-            }
-          }
-        }
-      };
-
-      getLogin().then(getGroup(props.group));
-    }, []);
-
-    useEffect(() => {
-      if (isLogged === false) {
-        console.log("not logged");
-        navigate("/");
       }
-    }, [isLogged]);
-
-    useEffect(() => {
-      if (isGroup === false) {
-        console.log("not admin");
-        navigate("/home");
-      }
-    }, [isGroup]);
-  }
-
-  OnLoad();
-*/
+    };
+    checkGroup();
+  }, []);
   //home
   const homePage = () => {
     navigate("/home");

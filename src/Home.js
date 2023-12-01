@@ -18,7 +18,6 @@ import { useNavigate } from "react-router-dom";
 const defaultTheme = createTheme();
 
 export default function Home() {
-  const [userGroup, setUserGroup] = useState("");
   const navigate = useNavigate();
   //Authorization
   const config = {
@@ -26,24 +25,11 @@ export default function Home() {
       Authorization: "Bearer " + Cookies.get("token"),
     },
   };
-  useEffect(() => {
-    const getUserGroup = async () => {
-      try {
-        const group = await axios.get("http://localhost:8080/controller/getUserGroup", config);
-        setUserGroup(group.data.group_list);
-      } catch (err) {
-        if (err.response.status === 401) {
-          navigate("/");
-        }
-      }
-    };
-    getUserGroup();
-  }, []);
 
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
-      <Appbar title="Home" group={userGroup} />
+      <Appbar title="Home" />
       <main>
         <Box
           sx={{
