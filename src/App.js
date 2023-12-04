@@ -3,6 +3,7 @@ import Home from "./Home.js";
 import { Routes, Route } from "react-router-dom";
 import MyAccount from "./MyAccount.js";
 import AccountManagement from "./AccountManagement.js";
+import * as React from "react";
 
 function App() {
   return (
