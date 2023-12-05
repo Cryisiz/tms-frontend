@@ -42,6 +42,7 @@ export default function Appbar(props) {
         await axios.get("http://localhost:8080/controller/checkLogin", config);
       } catch (err) {
         if (err.response.status === 401) {
+          Cookies.remove("token");
           navigate("/");
         }
       }
