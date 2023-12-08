@@ -16,6 +16,8 @@ export default function Appbar(props) {
       Authorization: "Bearer " + Cookies.get("token"),
     },
   };
+
+  //check if is admin to display button
   useEffect(() => {
     const checkGroup = async () => {
       try {
@@ -35,7 +37,7 @@ export default function Appbar(props) {
     };
     checkGroup();
   }, [props.call]);
-
+  //check authorized user
   useEffect(() => {
     const checkLogin = async () => {
       try {
@@ -49,6 +51,8 @@ export default function Appbar(props) {
     };
     checkLogin();
   }, [props.call]);
+
+  //check authorized role
   useEffect(() => {
     const checkGroup = async () => {
       if (props.group !== undefined && props.group !== null && props.group !== "") {
@@ -87,7 +91,6 @@ export default function Appbar(props) {
 
   //logout
   const logOut = () => {
-    axios.get("http://localhost:8080/controller/_logout", config).catch(() => {});
     Cookies.remove("token");
     navigate("/");
   };
