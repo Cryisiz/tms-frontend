@@ -56,6 +56,9 @@ export default function Home() {
       }
     }
   }
+  const Go = (acronym) => {
+    navigate("/kanban", { state: { acronym: acronym } });
+  };
 
   async function handleSubmit(e, row) {
     e.preventDefault();
@@ -561,7 +564,7 @@ export default function Home() {
               <Button
                 id={item.App_Acronym + "_button"}
                 variant="outlined"
-                onClick={(e) => handleDisable(e, item)}
+                onClick={() => Go(item.App_Acronym)}
               >
                 Go
               </Button>

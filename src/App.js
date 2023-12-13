@@ -4,6 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import MyAccount from "./MyAccount.js";
 import AccountManagement from "./AccountManagement.js";
 import * as React from "react";
+import Kanban from "./Kanban.js";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Route path="/home" element={<Home />} />
       <Route path="/myaccount" element={<MyAccount />} />
       <Route path="/accountmanagement" element={<AccountManagement />} />
+      <Route path="/kanban" element={<Kanban />} />
     </Routes>
   );
 }
