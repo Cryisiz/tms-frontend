@@ -16,8 +16,13 @@ import CreateTask from "./CreateTask";
 const defaultTheme = createTheme();
 
 export default function Kanban() {
+  const navigate = useNavigate();
   const { state } = useLocation();
   const { acronym } = state;
+  const createPlan = () => {
+    navigate("/plan", { state: { acronym: acronym } });
+  };
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
@@ -33,7 +38,10 @@ export default function Kanban() {
         ></Box>
         <Container maxWidth="false">
           <Box mb={2} paddingLeft={23}>
-            <CreateTask />
+            <CreateTask acronym={acronym} />
+            <Button onClick={createPlan} variant="outlined">
+              Create Plan
+            </Button>
           </Box>
         </Container>
       </main>
