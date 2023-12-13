@@ -451,9 +451,9 @@ export default function AccountManagement() {
             <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
               <TableHead>
                 <TableRow>
-                  <TableCell align="center">Username</TableCell>
+                  <TableCell align="center">Username*</TableCell>
                   <TableCell align="center">Email</TableCell>
-                  <TableCell align="center">Password</TableCell>
+                  <TableCell align="center">Password*</TableCell>
                   <TableCell align="center">Group</TableCell>
                   <TableCell align="center">Status</TableCell>
                   <TableCell align="center">Management</TableCell>
