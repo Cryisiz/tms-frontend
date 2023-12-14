@@ -12,6 +12,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Appbar from "./Appbar";
 import { useLocation, useNavigate } from "react-router-dom";
 import CreateTask from "./CreateTask";
+import ViewTask from "./ViewTask";
 
 const defaultTheme = createTheme();
 
@@ -42,6 +43,7 @@ export default function Kanban() {
             <Button onClick={createPlan} variant="outlined">
               Create Plan
             </Button>
+            <ViewTask taskid="zoo1001" acronym={acronym} />
           </Box>
         </Container>
       </main>

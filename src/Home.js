@@ -128,33 +128,6 @@ export default function Home() {
     }
   }
 
-  async function handleDisable(e, row) {
-    e.preventDefault();
-    const apps = row.App_Acronym;
-    try {
-      const response = await axios.put(
-        "http://localhost:8080/controller/toggleUserStatus/" + apps,
-        {},
-        config
-      );
-      toast.success(response.data.message, { autoClose: 1500 });
-      setCall(call + 1);
-      setTable(
-        table.map((row) => {
-          if (row.App_Acronym === apps) {
-            row.is_disabled = row.is_disabled === 0 ? 1 : 0;
-          }
-          return row;
-        })
-      );
-    } catch (err) {
-      toast.error(err.response.data.errMessage);
-      if (err.response.status === 401) {
-        navigate("/");
-      }
-    }
-  }
-
   async function createApp(e) {
     //we need to reinit the config incase the token has changed
     config.headers.Authorization = "Bearer " + Cookies.get("token");
