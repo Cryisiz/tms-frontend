@@ -60,8 +60,12 @@ export default function Plan() {
   //Getting the info from database to populate the table
   async function fetchData() {
     try {
-      const res = await axios.get("http://localhost:8080/controller/getApps/", config);
-      console.log(res);
+      const planAcronym = { Plan_app_Acronym: acronym };
+      const res = await axios.post(
+        "http://localhost:8080/controller/getAllPlan",
+        planAcronym,
+        config
+      );
       //set user to table default edit disabled
       setTable(
         res.data.data.map((plan) => {
@@ -81,12 +85,12 @@ export default function Plan() {
     e.preventDefault();
     //strip the _button from the id
     const id = e.target.id.replace("_button", "");
-    const disabled = table.find((row) => row.App_Acronym === id).editDisabled;
+    const disabled = table.find((row) => row.Plan_MVP_name === id).editDisabled;
     if (disabled) {
       //set edit disabled to false for the specific row
       setTable(
         table.map((row) => {
-          if (row.App_Acronym === id) {
+          if (row.Plan_MVP_name === id) {
             row.editDisabled = false;
           }
           return row;
@@ -94,14 +98,9 @@ export default function Plan() {
       );
     } else if (!disabled) {
       //get the values for the row from the table state
-      const startDate = table.find((row) => row.App_Acronym === id).App_startDate;
-      const endDate = table.find((row) => row.App_Acronym === id).App_endDate;
-      const description = table.find((row) => row.App_Acronym === id).App_Description;
-      const permCreate = table.find((row) => row.App_Acronym === id).App_permit_create;
-      const permOpen = table.find((row) => row.App_Acronym === id).App_permit_Open;
-      const permToDo = table.find((row) => row.App_Acronym === id).App_permit_toDoList;
-      const permDoing = table.find((row) => row.App_Acronym === id).App_permit_Doing;
-      const permDone = table.find((row) => row.App_Acronym === id).App_permit_Done;
+      const startDate = table.find((row) => row.Plan_MVP_name === id).Plan_startDate;
+      const endDate = table.find((row) => row.Plan_MVP_name === id).Plan_endDate;
+      const planName = table.find((row) => row.Plan_MVP_name === id).Plan_MVP_name;
       const body = {};
       if (startDate !== "" && startDate !== undefined) {
         body.startDate = startDate;
@@ -109,17 +108,11 @@ export default function Plan() {
       if (endDate !== "" && endDate !== undefined) {
         body.endDate = endDate;
       }
-      if (description !== "" && description !== undefined) {
-        body.description = description;
-      }
-      body.permCreate = permCreate;
-      body.permOpen = permOpen;
-      body.permToDo = permToDo;
-      body.permDoing = permDoing;
-      body.permDone = permDone;
+      body.planName = planName;
+      body.planAcronym = acronym;
       try {
-        const response = await axios.put(
-          "http://localhost:8080/controller/updateApp/" + row.App_Acronym,
+        const response = await axios.post(
+          "http://localhost:8080/controller/updatePlan",
           body,
           config
         );
@@ -127,10 +120,9 @@ export default function Plan() {
         setCall(call + 1);
         setTable(
           table.map((row) => {
-            if (row.App_Acronym === id) {
-              row.App_startDate = startDate;
-              row.App_endDate = endDate;
-              row.App_Description = description;
+            if (row.Plan_MVP_name === id) {
+              row.Plan_startDate = startDate;
+              row.Plan_endDate = endDate;
               row.editDisabled = true;
             }
             return row;
@@ -181,11 +173,6 @@ export default function Plan() {
     headers: {
       Authorization: "Bearer " + Cookies.get("token"),
     },
-  };
-
-  //kanban
-  const kanban = (acronym) => {
-    navigate("/kanban", { state: { acronym: acronym } });
   };
 
   //Run once on page load
@@ -298,20 +285,19 @@ export default function Plan() {
 
     const onInputChange = (index, item) => {
       state[index][item.type] = item.content;
-      console.log(item.type);
     };
 
     //Update field behaviour upon clicking 'Edit'
     return (
       <>
         {state.map((item, index) => (
-          <TableRow key={item.App_Acronym} noValidate>
-            <TableCell align="center">{item.App_Acronym}</TableCell>
+          <TableRow key={item.Plan_MVP_name} noValidate>
+            <TableCell align="center">{item.Plan_MVP_name}</TableCell>
             <TableCell align="center">
               <Grid xs={12} align="center">
                 <Child
-                  id={"App_startDate"}
-                  item={item.App_startDate}
+                  id={"Plan_startDate"}
+                  item={item.Plan_startDate}
                   index={index}
                   onChange={onInputChange}
                   disabled={item.editDisabled}
@@ -319,30 +305,30 @@ export default function Plan() {
               </Grid>
               <Grid xs={12} align="center">
                 <Child
-                  id={"App_endDate"}
-                  item={item.App_endDate}
+                  id={"Plan_endDate"}
+                  item={item.Plan_endDate}
                   index={index}
                   onChange={onInputChange}
                   disabled={item.editDisabled}
                 />
               </Grid>
             </TableCell>
-            <TableCell align="center">{item.App_Rnumber}</TableCell>
+            <TableCell align="center">
+              <Paper
+                id={"Plan_color"}
+                item={item.Plan_color}
+                variant="outlined"
+                sx={{ width: 170, height: 50, bgcolor: item.Plan_color }}
+              />
+            </TableCell>
             {/* Edit and disable/enable button */}
             <TableCell align="center">
               <Button
-                id={item.App_Acronym + "_button"}
+                id={item.Plan_MVP_name + "_button"}
                 variant="outlined"
                 onClick={(e) => handleSubmit(e, item)}
               >
                 {item.editDisabled ? "Edit" : "Save"}
-              </Button>
-              <Button
-                id={item.App_Acronym + "_button"}
-                variant="outlined"
-                onClick={() => kanban(item.App_Acronym)}
-              >
-                Kanban
               </Button>
             </TableCell>
           </TableRow>
