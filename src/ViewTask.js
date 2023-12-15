@@ -105,8 +105,9 @@ export default function ViewTask(props) {
             <Grid container spacing={1}>
               <Grid xs={4}>
                 <Typography component="h1" variant="h6">
-                  App Acronym {props.acronym}
+                  App Acronym
                 </Typography>
+                <Typography>{props.acronym}</Typography>
                 <Typography variant="h6">Task Name</Typography>
                 <Typography>{taskValue.Task_name}</Typography>
                 <Typography variant="h6">Task State</Typography>
@@ -124,8 +125,17 @@ export default function ViewTask(props) {
               </Grid>
               <Grid xs={8}>
                 <Typography variant="h6">Task Description</Typography>
+                <TextField
+                  value={taskValue.Task_description}
+                  multiline
+                  rows={3}
+                  fullWidth
+                  disabled
+                />
                 <Typography variant="h6">Task Notes</Typography>
+                <TextField value={taskValue.Task_notes} multiline rows={7} fullWidth disabled />
                 <Typography variant="h6">New Notes</Typography>
+                <TextField multiline rows={3} fullWidth />
               </Grid>
               <Grid xs={2}>
                 <Button variant="outlined" size="large" onClick={handleClose}>
